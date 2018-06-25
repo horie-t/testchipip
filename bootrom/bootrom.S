@@ -1,5 +1,6 @@
 #define DRAM_BASE 0x80000000
-
+#define LED_REG 0x10012000
+	
 .section .text.start, "ax", @progbits
 .globl _start
 _start:
@@ -21,6 +22,9 @@ interrupt_loop:
 _hang:
   // This boot ROM doesn't know about any boot devices, so it just spins,
   // waiting for the serial interface to load the program and interrupt it
+  li t0, LED_REG
+  li t1, 1
+  sw t1, 0(t0)
   la a0, _start
   csrw mtvec, a0
   li a0, 8 // MIE or MSIP bit
